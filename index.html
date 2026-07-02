@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Timothy Piao — FitFlow</title>
+<meta name="description" content="How Timothy Piao, a high school student, went from an idea to building FitFlow — an AI fitness app that builds and adapts its own training plans." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0A0A0A; --bg2:#111111; --card:#141414; --border:#1f1f1f; --border2:#262626;
+    --green:#4ADE80; --green2:#22C55E; --deep:#052E16; --mint:#F0FDF4;
+    --text:#F5F5F5; --muted:#B8B8B8; --faint:#8a8a8a;
+    --mono:'JetBrains Mono',monospace; --disp:'Bebas Neue',sans-serif; --body:'DM Sans',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:var(--body);line-height:1.6;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 24px}
+  nav{position:fixed;top:0;left:0;right:0;z-index:50;backdrop-filter:blur(12px);background:rgba(10,10,10,.7);border-bottom:1px solid var(--border)}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .logo{display:flex;align-items:center;gap:10px;font-family:var(--disp);font-size:22px;letter-spacing:1px}
+  .logo .mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--green),var(--green2));display:grid;place-items:center}
+  .logo .mark svg{width:18px;height:18px}
+  .navlinks{display:flex;gap:26px;font-size:14px;color:var(--muted)}
+  .navlinks a:hover{color:var(--green)}
+  @media(max-width:640px){.navlinks{display:none}}
+  header{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden}
+  .aurora{position:absolute;inset:0;z-index:0}
+  .aurora span{position:absolute;border-radius:50%;filter:blur(90px);opacity:.45}
+  .a1{width:520px;height:520px;background:radial-gradient(circle,#22C55E,transparent 68%);top:-120px;left:-120px;animation:float1 18s ease-in-out infinite}
+  .a2{width:560px;height:560px;background:radial-gradient(circle,#4ADE80,transparent 68%);top:20%;right:-160px;animation:float2 22s ease-in-out infinite}
+  .a3{width:460px;height:460px;background:radial-gradient(circle,#0EA5E9,transparent 70%);bottom:-140px;left:25%;opacity:.3;animation:float3 26s ease-in-out infinite}
+  .grid-bg{position:absolute;inset:0;z-index:0;opacity:.14;background-image:linear-gradient(#ffffff10 1px,transparent 1px),linear-gradient(90deg,#ffffff10 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(120% 90% at 50% 0%,#000 40%,transparent 100%)}
+  @keyframes float1{50%{transform:translate(80px,60px) scale(1.1)}}
+  @keyframes float2{50%{transform:translate(-70px,50px) scale(1.08)}}
+  @keyframes float3{50%{transform:translate(40px,-50px) scale(1.12)}}
+  .hero-content{position:relative;z-index:1;padding:100px 0 60px}
+  .eyebrow{color:var(--green);font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase}
+  h1.name{font-family:var(--disp);font-size:clamp(56px,11vw,120px);line-height:.9;margin-top:14px}
+  h1.name .grn{color:var(--green)}
+  .subtitle{font-size:clamp(17px,2.6vw,22px);color:var(--muted);margin-top:20px;max-width:620px}
+  .hero-cta{display:flex;gap:14px;margin-top:34px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:14px;font-weight:700;font-size:15px;transition:.2s}
+  .btn-primary{background:var(--green);color:var(--deep)}
+  .btn-primary:hover{transform:translateY(-2px)}
+  .btn-ghost{border:1px solid var(--border2);color:var(--text)}
+  .btn-ghost:hover{border-color:var(--green);color:var(--green)}
+  .scroll-hint{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);color:var(--faint);font-size:12px;letter-spacing:2px;text-transform:uppercase;z-index:1;animation:bob 2s ease-in-out infinite}
+  @keyframes bob{50%{transform:translate(-50%,8px)}}
+  section{padding:90px 0;position:relative}
+  .tag{color:var(--green);font-family:var(--mono);font-size:13px;letter-spacing:1px}
+  h2{font-family:var(--disp);font-size:clamp(34px,6vw,58px);line-height:1;margin:10px 0 8px}
+  .lead{color:var(--muted);font-size:17px;max-width:680px}
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+  .story{margin-top:40px;display:grid;gap:18px}
+  .step{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:26px;position:relative;overflow:hidden}
+  .step::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(var(--green),var(--green2))}
+  .step .n{font-family:var(--disp);font-size:15px;color:var(--green);letter-spacing:2px}
+  .step h3{font-size:22px;margin:6px 0 8px}
+  .step p{color:var(--muted);font-size:15.5px}
+  .timeline{margin-top:44px;position:relative;padding-left:34px}
+  .timeline::before{content:'';position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:var(--border2)}
+  .timeline .prog{position:absolute;left:9px;top:6px;width:2px;height:0;background:linear-gradient(var(--green),var(--green2));transition:height 1.4s ease}
+  .commit{position:relative;padding:0 0 26px 0;opacity:0;transform:translateX(14px);transition:opacity .6s ease,transform .6s ease}
+  .commit .dot{position:absolute;left:-33px;top:3px;width:18px;height:18px;border-radius:50%;background:var(--bg);border:2px solid var(--border2);display:grid;place-items:center;transition:.5s}
+  .commit .dot::after{content:'';width:7px;height:7px;border-radius:50%;background:var(--border2);transition:.5s}
+  .commit.in{opacity:1;transform:none}
+  .commit.in .dot{border-color:var(--green);box-shadow:0 0 0 4px rgba(74,222,128,.12)}
+  .commit.in .dot::after{background:var(--green)}
+  .commit .hash{font-family:var(--mono);font-size:12px;color:var(--green);opacity:.9}
+  .commit .msg{font-size:16px;font-weight:600;margin-top:3px}
+  .commit .desc{color:var(--muted);font-size:14px;margin-top:3px}
+  .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:40px}
+  .feat{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;transition:.25s}
+  .feat:hover{border-color:var(--green);transform:translateY(-4px)}
+  .feat .ic{width:44px;height:44px;border-radius:12px;background:rgba(74,222,128,.12);color:var(--green);display:grid;place-items:center;margin-bottom:14px;font-size:22px}
+  .feat h4{font-size:17px;margin-bottom:6px}
+  .feat p{color:var(--muted);font-size:14px}
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+  .chip{font-family:var(--mono);font-size:13px;color:var(--muted);background:var(--bg2);border:1px solid var(--border2);padding:8px 14px;border-radius:999px}
+  .chip:hover{color:var(--green);border-color:var(--green)}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;margin-top:36px}
+  .stat{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:24px;text-align:center}
+  .stat .num{font-family:var(--disp);font-size:48px;color:var(--green);line-height:1}
+  .stat .lbl{color:var(--faint);font-size:12px;text-transform:uppercase;letter-spacing:1.5px;margin-top:8px}
+  .band{background:linear-gradient(135deg,#0d1f14,#0a0a0a);border:1px solid var(--border);border-radius:26px;padding:48px 34px;text-align:center;margin-top:20px}
+  .band h2{margin-bottom:10px}
+  footer{padding:40px 0 60px;border-top:1px solid var(--border);color:var(--faint);font-size:13px;text-align:center;margin-top:70px}
+  footer a{color:var(--green)}
+</style>
+</head>
+<body>
+<nav>
+  <div class="wrap">
+    <div class="logo"><span class="mark"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2 5 13h5l-1.5 9L19 10h-5.5z" fill="#052E16"/></svg></span>FITFLOW</div>
+    <div class="navlinks">
+      <a href="#story">The Story</a><a href="#journey">Build Journey</a><a href="#features">Features</a><a href="#tech">Tech</a>
+      <a href="https://fitflow-beta.vercel.app" target="_blank" rel="noopener">Live App ↗</a>
+    </div>
+  </div>
+</nav>
+<header>
+  <div class="grid-bg"></div>
+  <div class="aurora"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="wrap hero-content">
+    <div class="eyebrow">A high-school project by Timothy Piao</div>
+    <h1 class="name">BUILD MUSCLE,<br><span class="grn">LOSE FAT.</span></h1>
+    <p class="subtitle">FitFlow is an AI fitness app that builds and adapts its own training plans — and it started as one student's idea. This is the story of how it went from a problem I felt to an app real people can use.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="https://fitflow-beta.vercel.app" target="_blank" rel="noopener">Open the live app →</a>
+      <a class="btn btn-ghost" href="https://github.com/piaotimothy2011-coder/Fitflow" target="_blank" rel="noopener">View the code</a>
+    </div>
+  </div>
+  <div class="scroll-hint">scroll ↓</div>
+</header>
+<section id="story"><div class="wrap">
+  <div class="reveal"><div class="tag">// the story</div><h2>FROM AN IDEA TO AN APP</h2>
+    <p class="lead">I'm Timothy Piao, a high school student. I've always loved two things: sport and building. FitFlow is where they finally met.</p></div>
+  <div class="story">
+    <div class="step reveal"><div class="n">01 — INSPIRATION</div><h3>The problem I kept seeing</h3>
+      <p>I noticed that everyone around me wanted to get in shape but got stuck in the same place. Generic PDF workout plans didn't fit anyone. Friends downloaded fitness apps and quit in a week because they were confusing, or asked for money before they'd done a single push-up. I kept thinking: working out shouldn't require you to already be an expert. What if an app just built the plan for you — and quietly got smarter as you trained?</p></div>
+    <div class="step reveal"><div class="n">02 — THE IDEA</div><h3>One plan that builds itself</h3>
+      <p>The core idea became simple: ask a few questions — your goal, your level, your equipment, how many days you can train — and generate a real, personalized weekly program instantly. No blank screens, no guesswork. Then let that plan progress on its own as the user logs their sessions, so it always feels one step ahead of them instead of one step behind.</p></div>
+    <div class="step reveal"><div class="n">03 — DESIGN</div><h3>Designing for the person who hates the gym</h3>
+      <p>I designed FitFlow for the version of me on day one: nervous, unsure, easily overwhelmed. That's why the workout screen shows exactly one exercise at a time with a demo, auto rest timers, and a big green "next." I chose a calm dark theme with a single energetic green accent, a bold display typeface, and generous spacing so nothing feels cluttered. Every screen answers one question: "what do I do right now?"</p></div>
+    <div class="step reveal"><div class="n">04 — BUILDING</div><h3>Turning mockups into a real product</h3>
+      <p>I built FitFlow as a modern web app so anyone could open it on their phone with no download. A deterministic plan generator picks exercises from a big catalog based on your goal and equipment. I added GPS run tracking with a motion check that confirms you're actually running (not driving), a satellite route map, nutrition tracking with a food database, cloud accounts so your data follows you across devices, and a guided first-time tour so new users never feel lost.</p></div>
+    <div class="step reveal"><div class="n">05 — WHAT I LEARNED</div><h3>Shipping is a skill</h3>
+      <p>The hardest part wasn't any single feature — it was the hundred small decisions that make an app feel finished: what happens when there's no data, how errors are handled, whether a stretch shows "reps" or "seconds," how a password reset link should behave. Building FitFlow taught me that great products aren't one big idea; they're a thousand careful details, iterated on until they disappear.</p></div>
+  </div>
+</div></section>
+<section id="journey"><div class="wrap">
+  <div class="reveal"><div class="tag">// git log --oneline</div><h2>THE BUILD JOURNEY</h2>
+    <p class="lead">Every feature below is a real commit in FitFlow's history. Scroll to watch the branch grow, the way it actually happened.</p></div>
+  <div class="timeline" id="timeline"><div class="prog" id="prog"></div></div>
+</div></section>
+<section id="features"><div class="wrap">
+  <div class="reveal"><div class="tag">// what it does</div><h2>INSIDE FITFLOW</h2></div>
+  <div class="features" id="feat"></div>
+</div></section>
+<section><div class="wrap reveal">
+  <div class="tag">// by the numbers</div><h2>THE SCALE OF IT</h2>
+  <div class="stats">
+    <div class="stat"><div class="num" data-count="85">0</div><div class="lbl">Exercises</div></div>
+    <div class="stat"><div class="num" data-count="105">0</div><div class="lbl">Foods tracked</div></div>
+    <div class="stat"><div class="num" data-count="9">0</div><div class="lbl">Goal types</div></div>
+    <div class="stat"><div class="num" data-count="30">0</div><div class="lbl">Feature releases</div></div>
+  </div>
+</div></section>
+<section id="tech"><div class="wrap reveal">
+  <div class="tag">// built with</div><h2>THE TECH</h2>
+  <p class="lead">A modern web stack chosen so FitFlow runs on any phone, installs like an app, and syncs to the cloud.</p>
+  <div class="chips">
+    <span class="chip">Next.js 14</span><span class="chip">React</span><span class="chip">TypeScript</span>
+    <span class="chip">Tailwind CSS</span><span class="chip">Supabase (Auth + DB)</span><span class="chip">PostgreSQL + RLS</span>
+    <span class="chip">Geolocation API</span><span class="chip">DeviceMotion API</span><span class="chip">Leaflet + Satellite tiles</span>
+    <span class="chip">PWA</span><span class="chip">Vercel</span>
+  </div>
+</div></section>
+<section><div class="wrap reveal"><div class="band">
+  <div class="tag">// try it yourself</div><h2>SEE FITFLOW IN ACTION</h2>
+  <p class="lead" style="margin:0 auto 22px">Open it on your phone, answer a few questions, and watch it build you a plan in seconds.</p>
+  <div class="hero-cta" style="justify-content:center">
+    <a class="btn btn-primary" href="https://fitflow-beta.vercel.app" target="_blank" rel="noopener">Launch FitFlow →</a>
+    <a class="btn btn-ghost" href="https://github.com/piaotimothy2011-coder/Fitflow" target="_blank" rel="noopener">Read the source</a>
+  </div>
+</div></div></section>
+<footer><div class="wrap">
+  Designed &amp; built by <strong style="color:#fff">Timothy Piao</strong> · High school student &amp; developer<br>
+  FitFlow · Train smart. Move every day. · <a href="https://github.com/piaotimothy2011-coder/Fitflow" target="_blank" rel="noopener">GitHub</a>
+</div></footer>
+<script>
+  const COMMITS = [
+    ["init","Initial FitFlow web (Next.js 14)","The very first commit — a blank canvas and a big idea."],
+    ["a1c0","Supabase auth + cloud sync","Accounts so your plan and progress follow you across devices."],
+    ["b2d3","Deterministic plan generator","Answer a survey, get a real personalized weekly program instantly."],
+    ["c4e5","Flat-green redesign + logo","A calm dark theme with one energetic accent — the FitFlow look."],
+    ["d6f7","Guided one-exercise-at-a-time flow","The workout screen new users actually understand."],
+    ["e8a9","Outdoor GPS run tracker","Live pace, distance and a Run Plan for cardio days."],
+    ["f0b1","Motion check + satellite route map","Confirms you're really running, and maps where you went."],
+    ["a2c3","Editable workouts + bigger library","Add, remove and reorder exercises; more moves to pick from."],
+    ["b4d5","Timed sets with countdown timers","Stretches and holds run on a real timer, not fake reps."],
+    ["c6e7","Profile + metric / imperial","Set your body stats and units; everything adapts."],
+    ["d8f9","Email verify + password reset","Real, secure accounts with a proper forgot-password flow."],
+    ["e0a1","First-time interactive tour","A spotlight walkthrough so nobody feels lost on day one."],
+    ["f2c3","100+ food nutrition catalog","Track meals, macros and water against smart targets."],
+    ["a4e5","Instant goal-based plan rebuild","Switch goals and the whole program rebuilds to match."]
+  ];
+  const FEATURES = [
+    ["🏋️","Adaptive workouts","A weekly program that generates itself and progresses as you log sessions."],
+    ["🧭","Guided training","One exercise at a time, with demos, set logging and automatic rest timers."],
+    ["🏃","GPS run tracking","Live pace, top speed, calories, a motion check, and a satellite route map."],
+    ["🥗","Nutrition","Track meals, macros and water against targets built from your body and goal."],
+    ["📈","Progress","Streaks, muscle recovery, personal records and full run history."],
+    ["☁️","Cloud accounts","Secure email login with sync, so your data is always with you."]
+  ];
+  const tl=document.getElementById('timeline');
+  COMMITS.forEach(c=>{const el=document.createElement('div');el.className='commit';
+    el.innerHTML=`<span class="dot"></span><div class="hash">${c[0]} · commit</div><div class="msg">${c[1]}</div><div class="desc">${c[2]}</div>`;tl.appendChild(el);});
+  const fg=document.getElementById('feat');
+  FEATURES.forEach(f=>{const el=document.createElement('div');el.className='feat reveal';
+    el.innerHTML=`<div class="ic">${f[0]}</div><h4>${f[1]}</h4><p>${f[2]}</p>`;fg.appendChild(el);});
+  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.15});
+  document.querySelectorAll('.reveal,.commit').forEach(el=>io.observe(el));
+  const prog=document.getElementById('prog');const commits=[...document.querySelectorAll('.commit')];
+  function grow(){let m=0;commits.forEach(c=>{if(c.classList.contains('in')){const r=c.offsetTop+c.offsetHeight;if(r>m)m=r;}});if(m)prog.style.height=m+'px';}
+  window.addEventListener('scroll',grow,{passive:true});setInterval(grow,600);
+  const counters=document.querySelectorAll('[data-count]');
+  const cio=new IntersectionObserver((es)=>{es.forEach(e=>{if(!e.isIntersecting)return;const el=e.target,t=+el.dataset.count;let n=0;const s=Math.max(1,Math.round(t/40));
+    const iv=setInterval(()=>{n+=s;if(n>=t){n=t;clearInterval(iv);}el.textContent=n;},28);cio.unobserve(el);});},{threshold:.5});
+  counters.forEach(c=>cio.observe(c));
+</script>
+</body>
+</html>
